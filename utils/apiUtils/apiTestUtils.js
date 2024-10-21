@@ -22,3 +22,13 @@ export function getContentTypeHeaderValue(response) {
 export async function getResponseBody(response) {
     return await response.json();
 }
+
+export function getContentLengthHeaderValue(response) {
+    return headersArray(response)
+        .find((header) => header.name === 'Content-Length')
+        .value;
+}
+
+export async function getResponseText(response) {
+    return await response.text();
+}

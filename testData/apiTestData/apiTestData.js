@@ -1,8 +1,19 @@
 export const BASE_URL = 'http://localhost:5000/api';
-export const USERS_ENDPOINT = `${BASE_URL}/users`;
+export  const USERS_ENDPOINT = `${BASE_URL}/users`;
+
+export const expectedTexts = {
+    successfulGetApiHome: "Node Express API Server App",
+    unsuccessfulGet: "Cannot GET",
+}
 
 export const expectedHeaders = {
-    contentTypeValue: "application/json; charset=utf-8",
+    contentTypeValue: {
+        applicationJson: "application/json; charset=utf-8",
+        textHtml: "text/html; charset=utf-8",
+    },
+    contentLengthValue: {
+        successfulGetApiHomeLength: expectedTexts.successfulGetApiHome.length.toString(),
+    },
 }
 
 export const expectedStatusCodes = {
@@ -20,5 +31,5 @@ export const expected = {
 export const user = {
     "firstName": "John",
     "lastName": "Doe",
-    "age": 35
+    "age": 35,
 }
