@@ -2,8 +2,6 @@ import { test, expect } from "@playwright/test";
 
 const HOME_PAGE_URL = 'http://localhost:5000/';
 
-
-
 [
     {tabName: 'Add', header: 'Add User', buttonName: 'Add', expectedCount: 3, expectedLabels: [ 'First Name', 'Last Name', 'Age' ], expectedURL: HOME_PAGE_URL+ 'add', expectedTitle: 'Users app'},
     {tabName: 'Search', header: 'Search User', buttonName: 'Search', expectedCount: 4, expectedLabels: [ 'User ID', 'First Name', 'Last Name', 'Age' ], expectedURL: HOME_PAGE_URL+ 'search', expectedTitle: 'Search user' },
@@ -42,7 +40,7 @@ const HOME_PAGE_URL = 'http://localhost:5000/';
             const button = await page.getByRole('button', { name: `${buttonName}`, exact: true });
             const formFields = await page.locator('.form-group');
             const labelsTexts = await formFields.locator('label').allInnerTexts();
-            console.log(labelsTexts);
+            const activeTabClassName = await page.getByRole('link', {name: `${tabName}`}).getAttribute('class');
 
             //h2, button, UserId
             await expect(h2Header).toBeVisible();
@@ -50,6 +48,8 @@ const HOME_PAGE_URL = 'http://localhost:5000/';
             await expect(button).toBeEnabled({ enabled: false });
             await expect(formFields).toHaveCount(expectedCount);
             await expect(labelsTexts).toEqual(expectedLabels);
+            //HW
+            await expect(activeTabClassName).toStrictEqual('nav-link active');
         })
 
         //### Test Case 4: Verify URL Change on Tab Click
@@ -82,5 +82,22 @@ const HOME_PAGE_URL = 'http://localhost:5000/';
         // 2. Refresh the page.
         // 3. Verify the same tab remains active after the refresh.
         // - Expected Result: The active tab before the refresh should remain active afterward.
+
+        test(`TC-NavTabFun-3: Verify ${tabName} Persistence on Page Refresh.`, async({ page }) => {
+
+            const tab = await page.getByRole('link', { name: `${tabName}`, exact:  true });
+
+            await tab.click();
+
+            const activeTabClassNameBeforeReload = await page.getByRole('link', {name: `${tabName}`}).getAttribute('class');
+
+            await expect(activeTabClassNameBeforeReload).toStrictEqual('nav-link active');
+
+            await page.reload();
+
+            const activeTabClassNameAfterReload = await page.getByRole('link', {name: `${tabName}`}).getAttribute('class');
+
+            await expect(activeTabClassNameAfterReload).toStrictEqual('nav-link active');
+        })
     })
 })
